@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Heart Disease Prediction</title>
+    <style>
+        body {
+            font-family: Arial;
+            background: #0f172a;
+            color: white;
+            text-align: center;
+        }
+        .box {
+            background: #1e293b;
+            padding: 20px;
+            margin: 50px auto;
+            width: 300px;
+            border-radius: 10px;
+        }
+        input, select {
+            width: 90%;
+            padding: 8px;
+            margin: 5px;
+            border-radius: 5px;
+        }
+        button {
+            background: #22c55e;
+            color: white;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        #result {
+            margin-top: 15px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="box">
+    <h2>❤️ Heart Disease Prediction</h2>
+
+    <input id="age" placeholder="Age">
+    <input id="bp" placeholder="Resting BP">
+    <input id="chol" placeholder="Cholesterol">
+    <input id="maxhr" placeholder="Max HR">
+    <input id="oldpeak" placeholder="Oldpeak">
+
+    <select id="sex">
+        <option value="M">Male</option>
+        <option value="F">Female</option>
+    </select>
+
+    <select id="cp">
+        <option value="ATA">ATA</option>
+        <option value="NAP">NAP</option>
+        <option value="TA">TA</option>
+        <option value="ASY">ASY</option>
+    </select>
+
+    <select id="fbs">
+        <option value="0">Fasting BS No</option>
+        <option value="1">Fasting BS Yes</option>
+    </select>
+
+    <select id="ecg">
+        <option value="Normal">Normal</option>
+        <option value="ST">ST</option>
+        <option value="LVH">LVH</option>
+    </select>
+
+    <select id="angina">
+        <option value="Y">Angina Yes</option>
+        <option value="N">Angina No</option>
+    </select>
+
+    <select id="slope">
+        <option value="Up">Up</option>
+        <option value="Flat">Flat</option>
+        <option value="Down">Down</option>
+    </select>
+
+    <button onclick="predict()">Predict</button>
+
+    <div id="result"></div>
+</div>
+
+<script>
+function predict() {
+    fetch('/predict', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+            age: document.getElementById("age").value,
+            resting_bp: document.getElementById("bp").value,
+            cholesterol: document.getElementById("chol").value,
+            max_hr: document.getElementById("maxhr").value,
+            oldpeak: document.getElementById("oldpeak").value,
+            sex: document.getElementById("sex").value,
+            chest_pain: document.getElementById("cp").value,
+            fasting_bs: document.getElementById("fbs").value,
+            resting_ecg: document.getElementById("ecg").value,
+            exercise_angina: document.getElementById("angina").value,
+            st_slope: document.getElementById("slope").value
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.result == 1) {
+            document.getElementById("result").innerHTML = "⚠️ High Risk";
+        } else {
+            document.getElementById("result").innerHTML = "✅ Low Risk";
+        }
+    });
+}
+</script>
+
+</body>
+</html>
